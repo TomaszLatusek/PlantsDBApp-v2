@@ -16,19 +16,16 @@
       <AvailableTasks
         v-if="tab == 1"
         :tasks="results"
-        userId.number="id"
         :dateFormat="dateFormat"
       />
       <TakenTasks
         v-if="tab == 2"
         :tasks="results"
-        userId.number="id"
         :dateFormat="dateFormat"
       />
       <FinishedTasks
         v-if="tab == 3"
         :tasks="results"
-        userId.number="id"
         :dateFormat="dateFormat"
       />
     </div>
@@ -57,7 +54,6 @@ export default {
     return {
       results: [],
       tab: 1,
-      id: -1,
       dateFormat: {
         weekday: "long",
         year: "numeric",
@@ -67,7 +63,7 @@ export default {
     };
   },
   props: {
-    userId: Number,
+    id: Number,
   },
   methods: {
     getTasks() {
@@ -77,18 +73,7 @@ export default {
     },
   },
   mounted() {
-    this.id = this.userId;
-    // this.$session.set("userId", this.userId);
-    // console.log(this.$session.get("userId"));
-    if (localStorage.id) {
-      this.id = localStorage.id;
-    }
-    console.log(localStorage.id);
-  },
-  watch: {
-    id(newId) {
-      localStorage.id = newId;
-    }
+    console.log(localStorage.userId);
   },
   beforeMount() {
     this.getTasks();
@@ -133,6 +118,7 @@ export default {
 #tabs a {
   color: white;
   padding: 5px 15px;
+  text-decoration: none;
 }
 
 #tabs a:hover {

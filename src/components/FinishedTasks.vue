@@ -24,7 +24,6 @@ export default {
   name: "finished",
   props: {
     tasks: Array,
-    userId: Number,
     dateFormat: Object,
   },
   computed: {

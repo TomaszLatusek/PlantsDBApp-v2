@@ -20,12 +20,9 @@
       </td>
       <td>{{ task.priorityNumber }}</td>
       <td>
-        <div class="dropdown">
-          <button @click="handleDropdown(task.dateOfPlanting)">></button>
-          <div :class="dropdown == task.dateOfPlanting ? 'active' : 'inactive'">
-            <a @click="takeTask(task)">take task</a>
-          </div>
-        </div>
+        <b-dropdown id="dropdown-dropright" dropright class="m-2" size="sm">
+          <b-dropdown-item @click="takeTask(task)">take</b-dropdown-item>
+        </b-dropdown> 
       </td>
     </tr>
   </table>
@@ -36,13 +33,7 @@ export default {
   name: "available",
   props: {
     tasks: Array,
-    userId: Number,
     dateFormat: Object,
-  },
-  data() {
-    return {
-      dropdown: "",
-    };
   },
   computed: {
     availableTasks: function () {
@@ -57,7 +48,9 @@ export default {
   },
   methods: {
     takeTask(task) {
-      this.tasks[this.tasks.indexOf(task)].userId = -localStorage.id;
+      const copy = [...this.tasks];
+      copy[copy.indexOf(task)].userId = -localStorage.id;
+      this.tasks = copy;
       //TODO: CALL API AND UPDATE DB
     },
     handleDropdown(key) {
@@ -128,32 +121,4 @@ input[type="checkbox"]:not(:disabled):hover:before {
   border-radius: 1px;
 }
 
-/* dropdown Actions */
-.dropdown {
-  display: block;
-  position: relative;
-}
-.inactive {
-  display: none;
-}
-
-.active {
-  z-index: 2;
-  position: absolute;
-  background: white;
-  box-shadow: 2px 2px 4px 2px rgb(60 60 59 / 15%);
-}
-
-.active a {
-  display: block;
-  position: relative;
-  color: #000000;
-  padding: 5px;
-  text-decoration: none;
-  font-size: 14px;
-}
-.active a:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
 </style>

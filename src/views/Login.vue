@@ -17,9 +17,7 @@
           @input="handleInput"
         />
         <button @click="validateForm">login</button>
-        <label
-          v-bind:class="invalidUsername ? 'invalid' : 'valid'"
-          align="left"
+        <label v-bind:class="invalidUsername ? 'invalid' : 'valid'" align="left"
           >Invalid credentials</label
         >
       </form>
@@ -40,6 +38,7 @@ export default {
       usernameValue: "",
       passwordValue: "",
       invalidUsername: false,
+      userId: -1,
     };
   },
   methods: {
@@ -51,8 +50,9 @@ export default {
             console.log(`Welcome ${this.usernameValue}`);
             this.$router.push({
               name: "tasks",
-              params: { userId: response.data },
+              params: { id: response.data },
             });
+            localStorage.userId = response.data;
           } else {
             this.invalidUsername = true;
           }
@@ -63,6 +63,17 @@ export default {
     },
     handleInput() {
       this.invalidUsername = false;
+    },
+  },
+  mounted() {
+    if (localStorage.userId) {
+      this.userId = localStorage.userId;
+    }
+    console.log(localStorage.userId);
+  },
+  watch: {
+    id(newId) {
+      localStorage.userId = newId;
     },
   },
 };

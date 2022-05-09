@@ -17,13 +17,10 @@
       </td>
       <td>{{ task.priorityNumber }}</td>
       <td>
-        <div class="dropdown">
-          <button @click="handleDropdown(task.dateOfPlanting)">></button>
-          <div :class="dropdown == task.dateOfPlanting ? 'active' : 'inactive'">
-            <a @click="finishTask(task)">finish</a>
-            <a @click="resignTask(task)">resign</a>
-          </div>
-        </div>
+        <b-dropdown id="dropdown-dropright" dropright class="m-2" size="sm">
+          <b-dropdown-item @click="finishTask(task)">finish</b-dropdown-item>
+          <b-dropdown-item @click="resignTask(task)">resign</b-dropdown-item>
+        </b-dropdown> 
       </td>
     </tr>
   </table>
@@ -35,13 +32,7 @@ export default {
   name: "taken",
   props: {
     tasks: Array,
-    userId: Number,
     dateFormat: Object,
-  },
-  data() {
-    return {
-      dropdown: "",
-    };
   },
   computed: {
     takenTasks: function () {
@@ -56,20 +47,17 @@ export default {
   },
   methods: {
     finishTask(task) {
-      this.tasks[this.tasks.indexOf(task)].userId *= -1;
-      this.tasks[this.tasks.indexOf(task)].realizationDate = Date.now();
+      const copy = [...this.tasks]
+      copy[copy.indexOf(task)].userId *= -1;
+      copy[copy.indexOf(task)].realizationDate = Date.now();
+      this.tasks = copy
       //TODO: CALL API AND UPDATE DB
     },
     resignTask(task) {
-      this.tasks[this.tasks.indexOf(task)].userId = null;
+      const copy = [...this.tasks]
+      copy[copy.indexOf(task)].userId = null;
+      this.tasks = copy
       //TODO: CALL API AND UPDATE DB
-    },
-    handleDropdown(key) {
-      if (key == this.dropdown) {
-        this.dropdown = "";
-      } else {
-        this.dropdown = key;
-      }
     },
   },
 };
@@ -133,32 +121,4 @@ input[type="checkbox"]:not(:disabled):hover:before {
   border-radius: 1px;
 }
 
-/* dropdown Actions */
-.dropdown {
-  display: block;
-  position: relative;
-}
-.inactive {
-  display: none;
-}
-
-.active {
-  z-index: 2;
-  position: absolute;
-  background: white;
-  box-shadow: 2px 2px 4px 2px rgb(60 60 59 / 15%);
-}
-
-.active a {
-  display: block;
-  position: relative;
-  color: #000000;
-  padding: 5px;
-  text-decoration: none;
-  font-size: 14px;
-}
-.active a:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
 </style>
