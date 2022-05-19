@@ -6,6 +6,9 @@
       <th>Activity</th>
       <th>Realisation date</th>
     </tr>
+    <tr v-if="finishedTasks.length == 0">
+      <td colspan="6" id="no-records">No records to show</td>
+    </tr>
     <tr v-for="task in finishedTasks" :key="task.dateOfPlanting">
       <td>{{ task.paletNumber }}</td>
       <td>{{ task.paletPlantsTypeName || "not specified" }}</td>
@@ -73,17 +76,21 @@ tr:hover {
 }
 
 th {
-  padding: 10px 0px 10px 5px;
+  padding: 10px 0px 10px 15px;
   margin: 0;
   color: white;
   border: 0;
 }
 
 td {
-  padding: 5px 0px 5px 5px;
+  padding: 5px 0px 5px 15px;
 }
 
 #headers {
   background: #76b852;
+}
+
+#no-records {
+  text-align: center;
 }
 </style>

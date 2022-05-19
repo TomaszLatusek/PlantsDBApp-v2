@@ -8,6 +8,9 @@
       <th>Priority</th>
       <th>Action</th>
     </tr>
+    <tr v-if="availableTasks.length == 0">
+      <td colspan="6" id="no-records">No records to show</td>
+    </tr>
     <tr
       v-for="task in availableTasks"
       :key="task.paletNumber + task.typeOfCareName"
@@ -21,8 +24,12 @@
       <td>{{ task.priorityNumber }}</td>
       <td>
         <b-dropdown id="dropdown-dropright" dropright class="m-2" size="sm">
-          <b-dropdown-item @click="takeTask(task)">take</b-dropdown-item>
-        </b-dropdown> 
+          <b-dropdown-item class="dropdown-item"
+            ><a @click="takeTask(task)" class="dropdown-item"
+              >take</a
+            ></b-dropdown-item
+          >
+        </b-dropdown>
       </td>
     </tr>
   </table>
@@ -49,7 +56,7 @@ export default {
   methods: {
     takeTask(task) {
       const copy = [...this.tasks];
-      copy[copy.indexOf(task)].userId = -localStorage.id;
+      copy[copy.indexOf(task)].userId = localStorage.id;
       this.tasks = copy;
       //TODO: CALL API AND UPDATE DB
     },
@@ -121,4 +128,7 @@ input[type="checkbox"]:not(:disabled):hover:before {
   border-radius: 1px;
 }
 
+#no-records {
+  text-align: center;
+}
 </style>

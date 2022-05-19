@@ -8,6 +8,9 @@
       <th>Priority</th>
       <th>Action</th>
     </tr>
+    <tr v-if="takenTasks.length == 0">
+      <td colspan="6" id="no-records">No records to show</td>
+    </tr>
     <tr v-for="task in takenTasks" :key="task.dateOfPlanting">
       <td>{{ task.paletNumber }}</td>
       <td>{{ task.paletPlantsTypeName || "not specified" }}</td>
@@ -20,7 +23,7 @@
         <b-dropdown id="dropdown-dropright" dropright class="m-2" size="sm">
           <b-dropdown-item @click="finishTask(task)">finish</b-dropdown-item>
           <b-dropdown-item @click="resignTask(task)">resign</b-dropdown-item>
-        </b-dropdown> 
+        </b-dropdown>
       </td>
     </tr>
   </table>
@@ -37,7 +40,10 @@ export default {
   computed: {
     takenTasks: function () {
       return (this.tasks || [])
-        .filter((result) => result.userId == -localStorage.id)
+        .filter(
+          (result) =>
+            result.userId == localStorage.id && result.realizationDate == null
+        )
         .sort((a, b) => {
           if (a.priorityNumber > b.priorityNumber) return -1;
           if (a.priorityNumber < b.priorityNumber) return 1;
@@ -47,16 +53,15 @@ export default {
   },
   methods: {
     finishTask(task) {
-      const copy = [...this.tasks]
-      copy[copy.indexOf(task)].userId *= -1;
+      const copy = [...this.tasks];
       copy[copy.indexOf(task)].realizationDate = Date.now();
-      this.tasks = copy
+      this.tasks = copy;
       //TODO: CALL API AND UPDATE DB
     },
     resignTask(task) {
-      const copy = [...this.tasks]
+      const copy = [...this.tasks];
       copy[copy.indexOf(task)].userId = null;
-      this.tasks = copy
+      this.tasks = copy;
       //TODO: CALL API AND UPDATE DB
     },
   },
@@ -93,14 +98,14 @@ tr:hover {
 }
 
 th {
-  padding: 10px 0px 10px 5px;
+  padding: 10px 0px 10px 15px;
   margin: 0;
   color: white;
   border: 0;
 }
 
 td {
-  padding: 5px 0px 5px 5px;
+  padding: 5px 0px 5px 15px;
 }
 
 #headers {
@@ -121,4 +126,7 @@ input[type="checkbox"]:not(:disabled):hover:before {
   border-radius: 1px;
 }
 
+#no-records {
+  text-align: center;
+}
 </style>
