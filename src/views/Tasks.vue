@@ -69,6 +69,7 @@ export default {
     getTasks() {
       axios.get(`${API}/ActualTaskDedic`).then((response) => {
         this.results = response.data;
+        console.log("getTasks")
       });
     },
   },

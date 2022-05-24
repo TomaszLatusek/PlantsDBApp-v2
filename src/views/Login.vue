@@ -44,15 +44,23 @@ export default {
   methods: {
     validateForm() {
       axios
-        .post(`${API}/LoginDedic?mail=${this.usernameValue}`)
+        .post(`${API}/LoginDedic`, { MAIL: `${this.usernameValue}` })
         .then((response) => {
-          if (response.data >= 0) {
+          if (response.data != "") {
             console.log(`Welcome ${this.usernameValue}`);
-            this.$router.push({
-              name: "tasks",
-              params: { id: response.data },
-            });
-            localStorage.userId = response.data;
+            if (response.data.usersid == 0) {
+              this.$router.push({
+                name: "tasks",
+                params: { id: response.data.usersid },
+              });
+            } else {
+              this.$router.push({
+                name: "tasks",
+                params: { id: response.data.usersid },
+              });
+            }
+
+            localStorage.userId = response.data.usersid;
           } else {
             this.invalidUsername = true;
           }

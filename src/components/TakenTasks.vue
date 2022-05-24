@@ -11,14 +11,15 @@
     <tr v-if="takenTasks.length == 0">
       <td colspan="6" id="no-records">No records to show</td>
     </tr>
-    <tr v-for="task in takenTasks" :key="task.dateOfPlanting">
-      <td>{{ task.paletNumber }}</td>
-      <td>{{ task.paletPlantsTypeName || "not specified" }}</td>
-      <td>{{ task.typeOfCareName }}</td>
+    <tr v-for="task in takenTasks" :key="task.actualtaskid">
+      <td>{{ task.paletid }}</td>
+      <td>{{ task.paletplantstypename || "not specified" }}</td>
+      <td>{{ task.typeofcarename }}</td>
       <td>
-        {{ new Date(task.timeOfCare).toLocaleDateString("en-US", dateFormat) }}
+        <span v-if="getDueDate(task) < new Date()" class="overdue">!</span>
+        {{ getDueDate(task).toLocaleDateString("pl-PL", dateFormat) }}
       </td>
-      <td>{{ task.priorityNumber }}</td>
+      <td>{{ task.prioritynumber }}</td>
       <td>
         <b-dropdown id="dropdown-dropright" dropright class="m-2" size="sm">
           <b-dropdown-item @click="finishTask(task)">finish</b-dropdown-item>
@@ -31,6 +32,11 @@
 
 
 <script>
+import axios from "axios";
+
+const API = "https://localhost:5001/api";
+axios.defaults.headers.common["accept"] = "text/json";
+
 export default {
   name: "taken",
   props: {
@@ -41,8 +47,8 @@ export default {
     takenTasks: function () {
       return (this.tasks || [])
         .filter(
-          (result) =>
-            result.userId == localStorage.id && result.realizationDate == null
+          (result) => result.userid == localStorage.userId &&
+          result.realizationDate == null
         )
         .sort((a, b) => {
           if (a.priorityNumber > b.priorityNumber) return -1;
@@ -59,11 +65,30 @@ export default {
       //TODO: CALL API AND UPDATE DB
     },
     resignTask(task) {
-      const copy = [...this.tasks];
-      copy[copy.indexOf(task)].userId = null;
-      this.tasks = copy;
-      //TODO: CALL API AND UPDATE DB
+      this.updateId(task.actualtaskid);
     },
+    updateId(taskId) {
+      axios
+        .put(`${API}/ActualTaskDedic/?actualTaskId=${taskId}&userId=-1`)
+        .then(() => {
+          this.getTasks();
+        });
+    },
+    getTasks() {
+      axios.get(`${API}/ActualTaskDedic`).then((response) => {
+        this.tasks = response.data;
+        console.log("getTasks available Taken");
+        console.log(response.data);
+      });
+    },
+    getDueDate(task) {
+      var date = new Date(task.dateofplanting);
+      date.setDate(date.getDate() + task.timeofcare);
+      return date;
+    },
+  },
+  mounted() {
+    this.getTasks();
   },
 };
 </script>
@@ -128,5 +153,10 @@ input[type="checkbox"]:not(:disabled):hover:before {
 
 #no-records {
   text-align: center;
+}
+
+.overdue {
+  font-weight: bold;
+  color: red;
 }
 </style>

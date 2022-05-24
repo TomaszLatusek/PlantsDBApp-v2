@@ -5,6 +5,8 @@ import Login from '../views/Login.vue';
 import Tasks from '../views/Tasks.vue';
 import Account from '../views/Account.vue';
 import Plants from '../views/Plants.vue';
+import Workers from '../views/Workers.vue';
+import Companies from '../views/Companies.vue';
 
 Vue.use(VueRouter)
 
@@ -34,6 +36,16 @@ const routes = [
     path: '/plants',
     name: 'plants',
     component: Plants,
+  },
+  {
+    path: '/workers',
+    name: 'workers',
+    component: Workers,
+  },
+  {
+    path: '/companies',
+    name: 'companies',
+    component: Companies,
   },
 ];
 const router = new VueRouter({

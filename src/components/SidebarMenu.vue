@@ -2,8 +2,10 @@
   <div>
     <div id="mySidenav" class="sidenav">
       <router-link to="/tasks" id="tasks">Tasks</router-link>
-      <router-link to="/account" id="acccount">My Account</router-link>
+      <router-link v-if="userId > 0" to="/account" id="account">My Account</router-link>
       <router-link to="/plants" id="plants">Plants</router-link>
+      <router-link v-if="userId == 0" to="/workers" id="workers">Workers</router-link>
+      <router-link v-if="userId == 0" to="/companies" id="companies">Companies</router-link>
     </div>
   </div>
 </template>
@@ -12,6 +14,11 @@
 export default {
   name: "SidebarMenu",
   methods: {},
+  computed: {
+    userId: function () {
+      return localStorage.userId;
+    },
+  },
 };
 </script>
 

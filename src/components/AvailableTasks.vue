@@ -11,17 +11,15 @@
     <tr v-if="availableTasks.length == 0">
       <td colspan="6" id="no-records">No records to show</td>
     </tr>
-    <tr
-      v-for="task in availableTasks"
-      :key="task.paletNumber + task.typeOfCareName"
-    >
-      <td>{{ task.paletNumber }}</td>
-      <td>{{ task.paletPlantsTypeName || "not specified" }}</td>
-      <td>{{ task.typeOfCareName }}</td>
+    <tr v-for="task in availableTasks" :key="task.actualtaskid">
+      <td>{{ task.paletid }}</td>
+      <td>{{ task.paletplantstypename || "not specified" }}</td>
+      <td>{{ task.typeofcarename }}</td>
       <td>
-        {{ new Date(task.timeOfCare).toLocaleDateString("en-US", dateFormat) }}
+        <span v-if="getDueDate(task) < new Date()" class="overdue">!</span>
+        {{ getDueDate(task).toLocaleDateString("pl-PL", dateFormat) }}
       </td>
-      <td>{{ task.priorityNumber }}</td>
+      <td>{{ task.prioritynumber }}</td>
       <td>
         <b-dropdown id="dropdown-dropright" dropright class="m-2" size="sm">
           <b-dropdown-item class="dropdown-item"
@@ -36,6 +34,11 @@
 </template>
 
 <script>
+import axios from "axios";
+
+const API = "https://localhost:5001/api";
+axios.defaults.headers.common["accept"] = "text/json";
+
 export default {
   name: "available",
   props: {
@@ -45,28 +48,43 @@ export default {
   computed: {
     availableTasks: function () {
       return (this.tasks || [])
-        .filter((result) => result.userId == null)
+        .filter((result) => result.userid == null || result.userid < 0)
         .sort((a, b) => {
-          if (a.priorityNumber > b.priorityNumber) return -1;
-          if (a.priorityNumber < b.priorityNumber) return 1;
+          if (this.getDueDate(a) < this.getDueDate(b)) return -1;
+          if (this.getDueDate(a) > this.getDueDate(b)) return 1;
+          if (a.prioritynumber > b.prioritynumber) return -1;
+          if (a.prioritynumber < b.prioritynumber) return 1;
           return 0;
         });
     },
   },
   methods: {
     takeTask(task) {
-      const copy = [...this.tasks];
-      copy[copy.indexOf(task)].userId = localStorage.id;
-      this.tasks = copy;
-      //TODO: CALL API AND UPDATE DB
+      this.updateId(task.actualtaskid);
     },
-    handleDropdown(key) {
-      if (key == this.dropdown) {
-        this.dropdown = "";
-      } else {
-        this.dropdown = key;
-      }
+    updateId(taskId) {
+      axios
+        .put(
+          `${API}/ActualTaskDedic/?actualTaskId=${taskId}&userId=${localStorage.userId}`
+        )
+        .then(() => {
+          this.getTasks();
+        });
     },
+    getTasks() {
+      axios.get(`${API}/ActualTaskDedic`).then((response) => {
+        this.tasks = response.data;
+        console.log("getTasks available");
+      });
+    },
+    getDueDate(task) {
+      var date = new Date(task.dateofplanting);
+      date.setDate(date.getDate() + task.timeofcare);
+      return date;
+    },
+  },
+  beforeMount() {
+    this.getTasks();
   },
 };
 </script>
@@ -130,5 +148,10 @@ input[type="checkbox"]:not(:disabled):hover:before {
 
 #no-records {
   text-align: center;
+}
+
+.overdue {
+  font-weight: bold;
+  color: red;
 }
 </style>

@@ -9,13 +9,13 @@
     <tr v-if="finishedTasks.length == 0">
       <td colspan="6" id="no-records">No records to show</td>
     </tr>
-    <tr v-for="task in finishedTasks" :key="task.dateOfPlanting">
-      <td>{{ task.paletNumber }}</td>
-      <td>{{ task.paletPlantsTypeName || "not specified" }}</td>
-      <td>{{ task.typeOfCareName }}</td>
+    <tr v-for="task in finishedTasks" :key="task.actualtaskid">
+      <td>{{ task.paletid }}</td>
+      <td>{{ task.paletplantstypename || "not specified" }}</td>
+      <td>{{ task.typeofcarename }}</td>
       <td>
         {{
-          new Date(task.realizationDate).toLocaleDateString("en-US", dateFormat)
+          new Date(task.realizationdate).toLocaleDateString("en-US", dateFormat)
         }}
       </td>
     </tr>
@@ -34,7 +34,7 @@ export default {
       return (this.tasks || [])
         .filter(
           (result) =>
-            result.userId == localStorage.id && result.realizationDate != null
+            result.userId == localStorage.userId && result.realizationDate != null
         )
         .sort((a, b) => {
           if (a.realizationDate > b.realizationDate) return -1;
