@@ -73,6 +73,11 @@ export default {
       });
     },
   },
+  computed: {
+    userId: function () {
+      return localStorage.userId;
+    },
+  },
   mounted() {
     console.log(localStorage.userId);
   },

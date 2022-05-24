@@ -34,7 +34,9 @@ export default {
       return (this.tasks || [])
         .filter(
           (result) =>
-            result.userId == localStorage.userId && result.realizationDate != null
+            (result.userId == localStorage.userId &&
+              result.realizationDate != null) ||
+            (localStorage.userId == 0 && result.realizationDate != null)
         )
         .sort((a, b) => {
           if (a.realizationDate > b.realizationDate) return -1;

@@ -9,22 +9,22 @@
         <p><span>Phone number: </span>{{ item.phone }}</p>
       </li>
     </ul> -->
-    <table v-for="item in results" :key="item.userId">
+    <table>
       <tr>
         <th>Name:</th>
-        <td>{{ item.name }}</td>
+        <td>{{ user.name }}</td>
       </tr>
       <tr>
         <th>Last name:</th>
-        <td>{{ item.lastName }}</td>
+        <td>{{ user.lastname }}</td>
       </tr>
       <tr>
         <th>Email address:</th>
-        <td>{{ item.mail }}</td>
+        <td>{{ user.mail }}</td>
       </tr>
       <tr>
         <th>Phone number:</th>
-        <td>{{ item.phone }}</td>
+        <td>{{ user.phone }}</td>
       </tr>
     </table>
   </div>
@@ -44,14 +44,13 @@ export default {
   },
   data() {
     return {
-      results: [],
+      user: {},
     };
   },
   methods: {
     getAccountDetails() {
-      axios.get(`${API}/Users`).then((response) => {
-        this.results = response.data;
-        console.log(response.data);
+      axios.get(`${API}/Users/${localStorage.userId}`).then((response) => {
+        this.user = response.data;
       });
     },
   },
@@ -62,7 +61,6 @@ export default {
 </script>
 
 <style scoped>
-
 * {
   font-family: "Roboto", sans-serif;
 }

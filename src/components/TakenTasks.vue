@@ -22,7 +22,9 @@
       <td>{{ task.prioritynumber }}</td>
       <td>
         <b-dropdown id="dropdown-dropright" dropright class="m-2" size="sm">
-          <b-dropdown-item @click="finishTask(task)">finish</b-dropdown-item>
+          <b-dropdown-item @click="finishTask(task)" v-if="userId > 0"
+            >finish</b-dropdown-item
+          >
           <b-dropdown-item @click="resignTask(task)">resign</b-dropdown-item>
         </b-dropdown>
       </td>
@@ -47,14 +49,19 @@ export default {
     takenTasks: function () {
       return (this.tasks || [])
         .filter(
-          (result) => result.userid == localStorage.userId &&
-          result.realizationDate == null
+          (result) =>
+            (result.userid == this.userId ||
+              (this.userId == 0 && result.userid > 0)) &&
+            result.realizationDate == null
         )
         .sort((a, b) => {
           if (a.priorityNumber > b.priorityNumber) return -1;
           if (a.priorityNumber < b.priorityNumber) return 1;
           return 0;
         });
+    },
+    userId: function () {
+      return localStorage.userId;
     },
   },
   methods: {

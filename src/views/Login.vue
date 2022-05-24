@@ -48,17 +48,11 @@ export default {
         .then((response) => {
           if (response.data != "") {
             console.log(`Welcome ${this.usernameValue}`);
-            if (response.data.usersid == 0) {
-              this.$router.push({
-                name: "tasks",
-                params: { id: response.data.usersid },
-              });
-            } else {
-              this.$router.push({
-                name: "tasks",
-                params: { id: response.data.usersid },
-              });
-            }
+
+            this.$router.push({
+              name: "tasks",
+              params: { id: response.data.usersid },
+            });
 
             localStorage.userId = response.data.usersid;
           } else {
