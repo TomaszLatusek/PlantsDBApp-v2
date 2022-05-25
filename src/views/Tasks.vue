@@ -18,11 +18,7 @@
         :tasks="results"
         :dateFormat="dateFormat"
       />
-      <TakenTasks
-        v-if="tab == 2"
-        :tasks="results"
-        :dateFormat="dateFormat"
-      />
+      <TakenTasks v-if="tab == 2" :tasks="results" :dateFormat="dateFormat" />
       <FinishedTasks
         v-if="tab == 3"
         :tasks="results"
@@ -69,7 +65,7 @@ export default {
     getTasks() {
       axios.get(`${API}/ActualTaskDedic`).then((response) => {
         this.results = response.data;
-        console.log("getTasks")
+        console.log("getTasks");
       });
     },
   },
@@ -109,14 +105,16 @@ export default {
 }
 
 #tableWrapper {
-  width: 70%;
+  /* width: 70%; */
+  width: 100%;
   margin: 0 auto;
-  padding-top: 40px;
+  /* padding-top: 40px; */
 }
 
 #tabs {
   display: flex;
-  width: 70%;
+  /* width: 70%; */
+  width: 100%;
   margin: 0 auto;
   background: #43a047;
 }

@@ -109,7 +109,8 @@ export default {
 }
 
 table {
-  width: 70%;
+  /* width: 70%; */
+  width: 100%;
   margin: 0 auto;
   text-align: left;
   box-shadow: 2px 2px 4px rgb(60 60 59 / 15%);

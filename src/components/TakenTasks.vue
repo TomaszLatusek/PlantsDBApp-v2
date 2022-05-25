@@ -1,40 +1,48 @@
 <template>
-  <table id="takenTasks">
-    <tr id="headers">
-      <th>Palet number</th>
-      <th>Plant</th>
-      <th>Activity</th>
-      <th>Due</th>
-      <th>Priority</th>
-      <th>Action</th>
-    </tr>
-    <tr v-if="takenTasks.length == 0">
-      <td colspan="6" id="no-records">No records to show</td>
-    </tr>
-    <tr v-for="task in takenTasks" :key="task.actualtaskid">
-      <td>{{ task.paletid }}</td>
-      <td>{{ task.paletplantstypename || "not specified" }}</td>
-      <td>{{ task.typeofcarename }}</td>
-      <td>
-        <span v-if="getDueDate(task) < new Date()" class="overdue">!</span>
-        {{ getDueDate(task).toLocaleDateString("pl-PL", dateFormat) }}
-      </td>
-      <td>{{ task.prioritynumber }}</td>
-      <td>
-        <b-dropdown id="dropdown-dropright" dropright class="m-2" size="sm">
-          <b-dropdown-item @click="finishTask(task)" v-if="userId > 0"
-            >finish</b-dropdown-item
-          >
-          <b-dropdown-item @click="resignTask(task)">resign</b-dropdown-item>
-        </b-dropdown>
-      </td>
-    </tr>
-  </table>
+  <div>
+    <UserDetailsModal :user="worker"/>
+    <table id="takenTasks">
+      <tr id="headers">
+        <th>Palet number</th>
+        <th v-if="userId == 0">Worker</th>
+        <th>Plant</th>
+        <th>Activity</th>
+        <th>Due</th>
+        <th>Priority</th>
+        <th>Action</th>
+      </tr>
+      <tr v-if="takenTasks.length == 0">
+        <td colspan="6" id="no-records">No records to show</td>
+      </tr>
+      <tr v-for="task in takenTasks" :key="task.actualtaskid">
+        <td>{{ task.paletid }}</td>
+        <td v-if="userId == 0" v-b-modal.modal-1 @click="getWorker(task.userid)">
+          {{ task.workerName + " " + task.workerLastName }}
+        </td>
+        <td>{{ task.paletplantstypename || "not specified" }}</td>
+        <td>{{ task.typeofcarename }}</td>
+        <td>
+          <span v-if="getDueDate(task) < new Date()" class="overdue">!</span>
+          {{ getDueDate(task).toLocaleDateString("pl-PL", dateFormat) }}
+        </td>
+        <td>{{ task.prioritynumber }}</td>
+        <td>
+          <b-dropdown id="dropdown-dropright" dropright class="m-2" size="sm">
+            <b-dropdown-item @click="finishTask(task)" v-if="userId > 0"
+              >finish</b-dropdown-item
+            >
+            <b-dropdown-item @click="resignTask(task)">resign</b-dropdown-item>
+          </b-dropdown>
+        </td>
+      </tr>
+    </table>
+  </div>
 </template>
 
 
 <script>
 import axios from "axios";
+import UserDetailsModal from "../components/UserDetailsModal.vue";
 
 const API = "https://localhost:5001/api";
 axios.defaults.headers.common["accept"] = "text/json";
@@ -44,6 +52,14 @@ export default {
   props: {
     tasks: Array,
     dateFormat: Object,
+  },
+  data() {
+    return {
+      worker: {},
+    };
+  },
+  components: {
+    UserDetailsModal,
   },
   computed: {
     takenTasks: function () {
@@ -82,11 +98,27 @@ export default {
         });
     },
     getTasks() {
-      axios.get(`${API}/ActualTaskDedic`).then((response) => {
+      axios.get(`${API}/ActualTaskDedic`).then(async (response) => {
         this.tasks = response.data;
-        console.log("getTasks available Taken");
+        // console.log("getTasks available Taken");
         console.log(response.data);
+        this.tasks = await Promise.all(
+          response.data.map(async (task) => ({
+            ...task,
+            workerName: (await this.getWorkerName(task)).data.name,
+            workerLastName: (await this.getWorkerName(task)).data.lastname,
+          }))
+        );
+        // console.log(this.getWorkerName(1))
       });
+    },
+    getWorker(id) {
+      axios.get(`${API}/Users/${id}`).then((response) => {
+        this.worker = response.data;
+      })
+    },
+    getWorkerName(task) {
+      return axios.get(`${API}/Users/${task.userid || 0}`);
     },
     getDueDate(task) {
       var date = new Date(task.dateofplanting);
@@ -117,7 +149,8 @@ export default {
 }
 
 table {
-  width: 70%;
+  /* width: 70%; */
+  width: 100%;
   margin: 0 auto;
   text-align: left;
   box-shadow: 2px 2px 4px rgb(60 60 59 / 15%);
