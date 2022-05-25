@@ -1,12 +1,12 @@
 <template>
   <div>
-    <b-button v-b-modal.modal-1 title="Add new company">+</b-button>
-    <b-modal id="modal-1" title="Add new company">
+    <b-button v-b-modal.modal-1 title="Add new plant type">+</b-button>
+    <b-modal id="modal-1" title="Add new plant type">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
         <b-form-group id="input-group-0" label="Id:" label-for="input-0">
           <b-form-input
             id="input-0"
-            v-model="form.companyid"
+            v-model="form.paletplantstypeid"
             required
           ></b-form-input>
         </b-form-group>
@@ -14,7 +14,7 @@
         <b-form-group id="input-group-1" label="Name:" label-for="input-1">
           <b-form-input
             id="input-1"
-            v-model="form.companyname"
+            v-model="form.paletplantstypename"
             required
           ></b-form-input>
         </b-form-group>
@@ -33,14 +33,13 @@ const API = "https://localhost:5001/api";
 axios.defaults.headers.common["accept"] = "text/json";
 
 export default {
-  name: "NewCompanyForm",
+  name: "NewPlantTypeForm",
   data() {
     return {
-      companies: [],
-      userCategories: [],
+      plants: [],
       form: {
-        companyid: "",
-        companyname: "",
+        paletplantstypeid: "",
+        paletplantstypename: "",
       },
       show: true,
     };
@@ -48,16 +47,16 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault();
-      axios.post(`${API}/Company`, this.form);
-      this.form.companyid = "";
-      this.form.companyname = "";
+      axios.post(`${API}/PaletPlantsType`, this.form);
+      this.form.paletplantstypeid = "";
+      this.form.paletplantstypename = "";
       this.$router.go();
     },
     onReset(event) {
       event.preventDefault();
       // Reset our form values
-      this.form.companyid = "";
-      this.form.companyname = "";
+      this.form.paletplantstypeid = "";
+      this.form.paletplantstypename = "";
       // Trick to reset/clear native browser form validation state
       this.show = false;
       this.$nextTick(() => {

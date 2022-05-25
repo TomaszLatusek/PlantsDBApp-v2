@@ -4,7 +4,7 @@
     <table id="availableTasks">
       <tr id="headers">
         <th>Name</th>
-        <th><NewCompanyForm @submitted="getCompanies()" /></th>
+        <th><NewCompanyForm /></th>
       </tr>
       <tr v-for="company in companies" :key="company.companyid">
         <td>{{ company.companyname }}</td>
