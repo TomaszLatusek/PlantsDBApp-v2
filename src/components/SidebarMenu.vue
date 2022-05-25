@@ -6,6 +6,7 @@
       <router-link to="/plants" id="plants">Plants</router-link>
       <router-link v-if="userId == 0" to="/workers" id="workers">Workers</router-link>
       <router-link v-if="userId == 0" to="/companies" id="companies">Companies</router-link>
+      <router-link to="/" id="home">Log out</router-link>
     </div>
   </div>
 </template>
@@ -52,7 +53,6 @@ export default {
 }
 
 .sidenav a:hover {
-  color: #ffffff;
   background: #43a047;
 }
 
@@ -64,4 +64,16 @@ export default {
     font-size: 18px;
   }
 }
+
+#home {
+  width: 100%;
+  position:absolute;                
+  bottom:0;                        
+  left:0;                        
+}
+
+/* #home:hover {
+  background: #76b852;
+} */
+
 </style>

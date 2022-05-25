@@ -8,6 +8,7 @@
         <th>Email address</th>
         <th>Phone number</th>
         <th>Company</th>
+        <th><NewUserForm @submitted="getWorkers()" /></th>
       </tr>
       <tr v-for="worker in workers" :key="worker.usersid">
         <td>{{ worker.name }}</td>
@@ -23,6 +24,7 @@
 <script>
 import axios from "axios";
 import SidebarMenu from "../components/SidebarMenu.vue";
+import NewUserForm from "../components/NewUserForm.vue";
 
 const API = "https://localhost:5001/api";
 axios.defaults.headers.common["accept"] = "text/json";
@@ -31,6 +33,7 @@ export default {
   name: "workers",
   components: {
     SidebarMenu,
+    NewUserForm,
   },
   data() {
     return {
@@ -40,11 +43,16 @@ export default {
   methods: {
     getWorkers() {
       axios.get(`${API}/Users`).then(async (response) => {
-        this.workers = await Promise.all(response.data.map(async worker => ({...worker, companyName: (await this.getWorkerCompany(worker)).data.companyname})));
+        this.workers = await Promise.all(
+          response.data.map(async (worker) => ({
+            ...worker,
+            companyName: (await this.getWorkerCompany(worker)).data.companyname,
+          }))
+        );
       });
     },
     getWorkerCompany(worker) {
-      return axios.get(`${API}/Company/${worker.companyid}`)
+      return axios.get(`${API}/Company/${worker.companyid}`);
     },
   },
   mounted() {
@@ -54,24 +62,29 @@ export default {
 </script>
 
 <style scoped>
-.workersWrapper {
-  margin-left: 250px;
-}
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
 * {
   font-family: "Roboto", sans-serif;
 }
 
-.accountWrapper {
+.workersWrapper {
   margin-left: 250px;
 }
 
+.titleRow td {
+  background: #43a047;
+  color: #ffffff;
+}
+
 table {
+  /* width: 70%; */
+  width: 100%;
   margin: 0 auto;
   text-align: left;
-  margin-top: 40px;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  box-shadow: 2px 2px 4px rgb(60 60 59 / 15%);
   border-collapse: collapse;
+  background: #ffffff;
 }
 
 tr:hover {
@@ -79,12 +92,34 @@ tr:hover {
 }
 
 th {
-  padding: 10px;
+  padding: 10px 0px 10px 15px;
   margin: 0;
+  color: white;
   border: 0;
 }
 
 td {
-  padding: 10px;
+  padding: 5px 0px 5px 15px;
+}
+
+#headers {
+  background: #76b852;
+}
+
+input[type="checkbox"]:before {
+  position: relative;
+  display: block;
+  width: 12px;
+  height: 12px;
+  content: "";
+}
+
+input[type="checkbox"]:not(:disabled):hover:before {
+  cursor: pointer;
+  border-radius: 1px;
+}
+
+#no-records {
+  text-align: center;
 }
 </style>

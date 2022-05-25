@@ -1,11 +1,22 @@
 <template>
   <div class="plantsWrapper">
     <SidebarMenu />
-    <ul>
-      <li v-for="item in plants" :key="item.paletPlantsTypeId">
-        <p><span>Name: </span>{{ item.paletPlantsTypeName }}</p>
-      </li>
-    </ul>
+    <table id="availableTasks">
+      <tr id="headers">
+        <th>Name</th>
+        <th>Last name</th>
+        <th>Email address</th>
+        <th>Phone number</th>
+        <th>Company</th>
+      </tr>
+      <tr v-for="worker in workers" :key="worker.usersid">
+        <td>{{ worker.name }}</td>
+        <td>{{ worker.lastname }}</td>
+        <td>{{ worker.mail }}</td>
+        <td>{{ worker.phone }}</td>
+        <td>{{ worker.companyName }}</td>
+      </tr>
+    </table>
   </div>
 </template>
 
