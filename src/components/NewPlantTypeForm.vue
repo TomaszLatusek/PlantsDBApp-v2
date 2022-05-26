@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button v-b-modal.modal-1 title="Add new plant type">+</b-button>
+    <b-button  v-b-modal.modal-1 title="Add new plant type">+</b-button>
     <b-modal id="modal-1" title="Add new plant type">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
         <b-form-group id="input-group-0" label="Id:" label-for="input-0">

@@ -4,10 +4,12 @@
     <table id="availableTasks">
       <tr id="headers">
         <th>Name</th>
+        <th>Number of workers</th>
         <th><NewCompanyForm /></th>
       </tr>
       <tr v-for="company in companies" :key="company.companyid">
         <td>{{ company.companyname }}</td>
+        <td>{{ company.numberOfWorkers }}</td>
       </tr>
     </table>
   </div>
@@ -34,9 +36,23 @@ export default {
   },
   methods: {
     getCompanies() {
-      axios.get(`${API}/Company`).then((response) => {
+      axios.get(`${API}/Company`).then(async (response) => {
         this.companies = response.data;
-        console.log(response.data);
+        this.companies = await Promise.all(
+          response.data.map(async (company) => ({
+            ...company,
+            numberOfWorkers: (
+              await this.getNumberOfWorkers(company)
+            )
+          }))
+        );
+      });
+    },
+    getNumberOfWorkers(company) {
+      return axios.get(`${API}/Users`).then((response) => {
+        return response.data.filter(
+          (result) => result.companyid == company.companyid
+        ).length;
       });
     },
   },

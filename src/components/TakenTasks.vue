@@ -71,8 +71,10 @@ export default {
             result.realizationDate == null
         )
         .sort((a, b) => {
-          if (a.priorityNumber > b.priorityNumber) return -1;
-          if (a.priorityNumber < b.priorityNumber) return 1;
+          if (this.getDueDate(a) < this.getDueDate(b)) return -1;
+          if (this.getDueDate(a) > this.getDueDate(b)) return 1;
+          if (a.prioritynumber > b.prioritynumber) return -1;
+          if (a.prioritynumber < b.prioritynumber) return 1;
           return 0;
         });
     },
@@ -105,11 +107,10 @@ export default {
         this.tasks = await Promise.all(
           response.data.map(async (task) => ({
             ...task,
-            workerName: (await this.getWorkerName(task)).data.name,
-            workerLastName: (await this.getWorkerName(task)).data.lastname,
+            workerName: task.userid > 0 ? (await this.getWorkerName(task)).data.name : "",
+            workerLastName: task.userid > 0 ? (await this.getWorkerName(task)).data.lastname : "",
           }))
-        );
-        // console.log(this.getWorkerName(1))
+       );
       });
     },
     getWorker(id) {

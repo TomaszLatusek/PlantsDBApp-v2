@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button v-b-modal.modal-1 title="Add new worker">+</b-button>
+    <b-button v-b-modal.modal-1 title="Add new worker" >+</b-button>
     <b-modal id="modal-1" title="Add new worker">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
         <b-form-group id="input-group-6" label="Id:" label-for="input-6">
@@ -44,13 +44,13 @@
         </b-form-group>
 
         <b-form-group id="input-group-5" label="Birthday:" label-for="input-5">
-          <b-form-input
+          <b-form-datepicker
             id="input-5"
             v-model="form.birthday"
+            locale="pl-PL"
             required
-          ></b-form-input>
+          ></b-form-datepicker>
         </b-form-group>
-
         <b-form-group
           id="input-group-7"
           label="User category:"
@@ -120,6 +120,7 @@ export default {
       this.form.birthday = "";
       this.form.userCategoryid = "";
       this.form.companyid = "";
+      this.$router.go();
     },
     onReset(event) {
       event.preventDefault();
