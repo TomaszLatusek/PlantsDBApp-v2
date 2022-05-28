@@ -7,6 +7,7 @@ import Account from '../views/Account.vue';
 import Plants from '../views/Plants.vue';
 import Workers from '../views/Workers.vue';
 import Companies from '../views/Companies.vue';
+import Utils from '../views/Utils.vue';
 
 Vue.use(VueRouter)
 
@@ -46,6 +47,12 @@ const routes = [
     path: '/companies',
     name: 'companies',
     component: Companies,
+  },
+  {
+    path: '/utils',
+    name: 'utils',
+    component: Utils,
+    props: true,
   },
 ];
 const router = new VueRouter({

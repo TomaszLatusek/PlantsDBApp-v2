@@ -111,7 +111,7 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault();
-      axios.post(`${API}/Users`, this.form).then(this.$emit("submitted"));
+      axios.post(`${API}/Users`, this.form);
       this.form.usersid = "";
       this.form.name = "";
       this.form.lastName = "";
@@ -127,7 +127,7 @@ export default {
       // Reset our form values
       this.form.name = "";
       this.form.lastName = "";
-      this.form.email = "";
+      this.form.mail = "";
       this.form.phone = "";
       this.form.birthday = "";
       // Trick to reset/clear native browser form validation state
