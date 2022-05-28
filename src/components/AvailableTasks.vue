@@ -68,7 +68,7 @@ export default {
     updateId(taskId) {
       axios
         .put(
-          `${API}/ActualTaskDedic/?actualTaskId=${taskId}&userId=${localStorage.userId}`
+          `${API}/ActualTaskDedic/5?actualTaskId=${taskId}&userId=${this.userId}`
         )
         .then(() => {
           this.getTasks();

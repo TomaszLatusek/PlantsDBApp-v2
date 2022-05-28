@@ -1,42 +1,70 @@
 <template>
-  <table id="finishedTasks">
-    <tr id="headers">
-      <th>Palet number</th>
-      <th>Plant</th>
-      <th>Activity</th>
-      <th>Realisation date</th>
-    </tr>
-    <tr v-if="finishedTasks.length == 0">
-      <td colspan="6" id="no-records">No records to show</td>
-    </tr>
-    <tr v-for="task in finishedTasks" :key="task.actualtaskid">
-      <td>{{ task.paletid }}</td>
-      <td>{{ task.paletplantstypename || "not specified" }}</td>
-      <td>{{ task.typeofcarename }}</td>
-      <td>
-        {{
-          new Date(task.realizationdate).toLocaleDateString("en-US", dateFormat)
-        }}
-      </td>
-    </tr>
-  </table>
+  <div>
+    <UserDetailsModal :user="worker" />
+    <table id="finishedTasks">
+      <tr id="headers">
+        <th>Palet number</th>
+        <th v-if="userId == 0">Worker</th>
+        <th>Plant</th>
+        <th>Activity</th>
+        <th>Realisation date</th>
+      </tr>
+      <tr v-if="finishedTasks.length == 0">
+        <td colspan="6" id="no-records">No records to show</td>
+      </tr>
+      <tr v-for="task in finishedTasks" :key="task.actualtaskid">
+        <td>{{ task.paletid }}</td>
+        <td
+          v-if="userId == 0"
+          v-b-modal.modal-1
+          @click="getWorker(task.userid)"
+        >
+          {{ task.workerName + " " + task.workerLastName }}
+        </td>
+        <td>{{ task.paletplantstypename || "not specified" }}</td>
+        <td>{{ task.typeofcarename }}</td>
+        <td>
+          {{
+            new Date(task.realizationdate).toLocaleDateString(
+              "en-US",
+              dateFormat
+            )
+          }}
+        </td>
+      </tr>
+    </table>
+  </div>
 </template>
 
 <script>
+import axios from "axios";
+import UserDetailsModal from "../components/UserDetailsModal.vue";
+
+const API = "https://localhost:5001/api";
+axios.defaults.headers.common["accept"] = "text/json";
+
 export default {
   name: "finished",
   props: {
     tasks: Array,
     dateFormat: Object,
   },
+  data() {
+    return {
+      worker: {},
+    };
+  },
+  components: {
+    UserDetailsModal,
+  },
   computed: {
     finishedTasks: function () {
       return (this.tasks || [])
         .filter(
           (result) =>
-            (result.userId == localStorage.userId &&
-              result.realizationDate != null) ||
-            (localStorage.userId == 0 && result.realizationDate != null)
+            (result.userid == localStorage.userId &&
+              result.realizationdate != null) ||
+            (localStorage.userId == 0 && result.realizationdate != null)
         )
         .sort((a, b) => {
           if (a.realizationDate > b.realizationDate) return -1;
@@ -44,6 +72,41 @@ export default {
           return 0;
         });
     },
+    userId: function () {
+      return localStorage.userId;
+    },
+  },
+  methods: {
+    getTasks() {
+      axios.get(`${API}/ActualTaskDedic`).then(async (response) => {
+        this.tasks = response.data;
+        console.log("getTasks available");
+        this.tasks = await Promise.all(
+          response.data.map(async (task) => ({
+            ...task,
+            workerName:
+              task.userid > 0 ? (await this.getWorkerName(task)).data.name : "",
+            workerLastName:
+              task.userid > 0
+                ? (
+                    await this.getWorkerName(task)
+                  ).data.lastname
+                : "",
+          }))
+        );
+      });
+    },
+    getWorker(id) {
+      axios.get(`${API}/Users/${id}`).then((response) => {
+        this.worker = response.data;
+      });
+    },
+    getWorkerName(task) {
+      return axios.get(`${API}/Users/${task.userid || 0}`);
+    },
+  },
+  beforeMount() {
+    this.getTasks();
   },
 };
 </script>
@@ -65,7 +128,7 @@ export default {
 }
 
 table {
-    /* width: 70%; */
+  /* width: 70%; */
   width: 100%;
   margin: 0 auto;
   text-align: left;

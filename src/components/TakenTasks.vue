@@ -68,7 +68,7 @@ export default {
           (result) =>
             (result.userid == this.userId ||
               (this.userId == 0 && result.userid > 0)) &&
-            result.realizationDate == null
+            result.realizationdate == null
         )
         .sort((a, b) => {
           if (this.getDueDate(a) < this.getDueDate(b)) return -1;
@@ -87,14 +87,18 @@ export default {
       const copy = [...this.tasks];
       copy[copy.indexOf(task)].realizationDate = Date.now();
       this.tasks = copy;
-      //TODO: CALL API AND UPDATE DB
+      axios
+        .put(`${API}/ActualTaskDedic/?actualTaskId=${task.actualtaskid}&userId=${this.userId}`)
+        .then(() => {
+          this.getTasks();
+        });
     },
     resignTask(task) {
       this.updateId(task.actualtaskid);
     },
     updateId(taskId) {
       axios
-        .put(`${API}/ActualTaskDedic/?actualTaskId=${taskId}&userId=-1`)
+        .put(`${API}/ActualTaskDedic/5?actualTaskId=${taskId}&userId=-1`)
         .then(() => {
           this.getTasks();
         });
@@ -102,7 +106,6 @@ export default {
     getTasks() {
       axios.get(`${API}/ActualTaskDedic`).then(async (response) => {
         this.tasks = response.data;
-        // console.log("getTasks available Taken");
         console.log(response.data);
         this.tasks = await Promise.all(
           response.data.map(async (task) => ({
