@@ -83,6 +83,7 @@ export default {
     getDueDate(task) {
       var date = new Date(task.dateofplanting);
       date.setDate(date.getDate() + task.timeofcare);
+      date.setHours(0, 0, 0, 0);
       return date;
     },
   },

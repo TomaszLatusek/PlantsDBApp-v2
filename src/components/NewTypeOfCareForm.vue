@@ -7,7 +7,7 @@
           <b-form-input
             id="input-0"
             v-model="form.typeofcareid"
-            required
+            
           ></b-form-input>
         </b-form-group>
 
@@ -48,8 +48,6 @@ export default {
     onSubmit(event) {
       event.preventDefault();
       axios.post(`${API}/TypeOfCare`, this.form);
-      this.form.typeofcareid = "";
-      this.form.typeofcarename = "";
       this.$router.go();
     },
     onReset(event) {

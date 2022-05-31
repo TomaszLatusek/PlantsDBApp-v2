@@ -87,11 +87,7 @@ export default {
             workerName:
               task.userid > 0 ? (await this.getWorkerName(task)).data.name : "",
             workerLastName:
-              task.userid > 0
-                ? (
-                    await this.getWorkerName(task)
-                  ).data.lastname
-                : "",
+              task.userid > 0 ? (await this.getWorkerName(task)).data.lastname : "",
           }))
         );
       });

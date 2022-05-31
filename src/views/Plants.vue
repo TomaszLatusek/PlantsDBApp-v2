@@ -3,10 +3,12 @@
     <SidebarMenu />
     <table id="availableTasks">
       <tr id="headers">
+        <th>Id</th>
         <th>Name</th>
         <th><NewPlantTypeForm v-if="userId == 0" /></th>
       </tr>
       <tr v-for="plant in plants" :key="plant.paletplantstypeid">
+        <td>{{ plant.paletplantstypeid }}</td>
         <td>{{ plant.paletplantstypename }}</td>
       </tr>
     </table>

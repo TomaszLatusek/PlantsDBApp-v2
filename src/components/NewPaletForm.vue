@@ -3,13 +3,6 @@
     <b-button v-b-modal.modal-1 title="Add new palet">+</b-button>
     <b-modal id="modal-1" title="Add new palet">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-        <b-form-group id="input-group-0" label="Id:" label-for="input-0">
-          <b-form-input
-            id="input-0"
-            v-model="form.paletid"
-            required
-          ></b-form-input>
-        </b-form-group>
 
         <b-form-group
           id="input-group-1"
@@ -37,7 +30,7 @@
           </b-form-select>
         </b-form-group>
 
-        <b-form-group
+        <!-- <b-form-group
           id="input-group-3"
           label="Date of planting:"
           label-for="input-3"
@@ -48,7 +41,7 @@
             locale="pl-PL"
             required
           ></b-form-datepicker>
-        </b-form-group>
+        </b-form-group> -->
 
         <b-button type="submit" variant="primary">Submit</b-button>
         <b-button type="reset" variant="danger">Reset</b-button>
@@ -80,8 +73,9 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault();
-      console.log(this.form);
-      axios.post(`${API}/Palet`, this.form);
+      axios.post(
+        `${API}/ActualTaskDedic?paletNumber=${this.form.paletnumber}&paletPlantsTypeId=${this.form.paletplantstypeid}`
+      );
       this.$router.go();
     },
     onReset(event) {

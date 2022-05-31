@@ -3,11 +3,13 @@
     <SidebarMenu />
     <table id="availableTasks">
       <tr id="headers">
+        <th>Id</th>
         <th>Name</th>
         <th>Number of workers</th>
         <th><NewCompanyForm /></th>
       </tr>
       <tr v-for="company in companies" :key="company.companyid">
+        <td>{{ company.companyid }}</td>
         <td>{{ company.companyname }}</td>
         <td>{{ company.numberOfWorkers }}</td>
       </tr>
