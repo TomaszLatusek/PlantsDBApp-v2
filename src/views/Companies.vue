@@ -6,7 +6,7 @@
         <th>Id</th>
         <th>Name</th>
         <th>Number of workers</th>
-        <th><NewCompanyForm /></th>
+        <th><NewCompanyForm :companyId="companies.length"/></th>
       </tr>
       <tr v-for="company in companies" :key="company.companyid">
         <td>{{ company.companyid }}</td>

@@ -3,13 +3,6 @@
     <b-button  v-b-modal.modal-1 title="Add new type of care">+</b-button>
     <b-modal id="modal-1" title="Add new type of care">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-        <b-form-group id="input-group-0" label="Id:" label-for="input-0">
-          <b-form-input
-            id="input-0"
-            v-model="form.typeofcareid"
-            
-          ></b-form-input>
-        </b-form-group>
 
         <b-form-group id="input-group-1" label="Name:" label-for="input-1">
           <b-form-input
@@ -44,9 +37,13 @@ export default {
       show: true,
     };
   },
+  props: {
+    typesId: Number,
+  },
   methods: {
     onSubmit(event) {
       event.preventDefault();
+      this.form.typeofcareid = this.typesId + 1;
       axios.post(`${API}/TypeOfCare`, this.form);
       this.$router.go();
     },

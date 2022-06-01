@@ -6,7 +6,7 @@
       <th>Time of care</th>
       <th>Plant type</th>
       <th>Priority</th>
-      <th><NewCareScheduleForm /></th>
+      <th><NewCareScheduleForm :scheduleId="careSchedules.length"/></th>
     </tr>
     <tr v-if="careSchedules.length == 0">
       <td colspan="6" id="no-records">No records to show</td>

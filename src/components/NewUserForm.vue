@@ -1,15 +1,8 @@
 <template>
   <div>
-    <b-button v-b-modal.modal-1 title="Add new worker" >+</b-button>
+    <b-button v-b-modal.modal-1 title="Add new worker">+</b-button>
     <b-modal id="modal-1" title="Add new worker">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-        <b-form-group id="input-group-6" label="Id:" label-for="input-6">
-          <b-form-input
-            id="input-6"
-            v-model="form.usersid"
-            required
-          ></b-form-input>
-        </b-form-group>
 
         <b-form-group id="input-group-1" label="Name:" label-for="input-1">
           <b-form-input
@@ -108,9 +101,13 @@ export default {
       show: true,
     };
   },
+  props: {
+    workerId: Number,
+  },
   methods: {
     onSubmit(event) {
       event.preventDefault();
+      this.form.usersid = this.workerId;
       axios.post(`${API}/Users`, this.form);
       this.form.usersid = "";
       this.form.name = "";

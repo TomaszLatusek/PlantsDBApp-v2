@@ -3,13 +3,6 @@
     <b-button v-b-modal.modal-1 title="Add new company">+</b-button>
     <b-modal id="modal-1" title="Add new company">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-        <b-form-group id="input-group-0" label="Id:" label-for="input-0">
-          <b-form-input
-            id="input-0"
-            v-model="form.companyid"
-            required
-          ></b-form-input>
-        </b-form-group>
 
         <b-form-group id="input-group-1" label="Name:" label-for="input-1">
           <b-form-input
@@ -45,12 +38,14 @@ export default {
       show: true,
     };
   },
+  props: {
+    companyId: Number,
+  },
   methods: {
     onSubmit(event) {
       event.preventDefault();
+      this.form.companyid = this.companyId + 1;
       axios.post(`${API}/Company`, this.form);
-      this.form.companyid = "";
-      this.form.companyname = "";
       this.$router.go();
     },
     onReset(event) {

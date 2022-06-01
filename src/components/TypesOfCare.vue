@@ -3,7 +3,7 @@
     <tr id="headers">
       <th>Id</th>
       <th>Name</th>
-      <th><NewTypeOfCareForm /></th>
+      <th><NewTypeOfCareForm :typesId="typesOfCare.length"/></th>
     </tr>
     <tr v-if="typesOfCare.length == 0">
       <td colspan="6" id="no-records">No records to show</td>

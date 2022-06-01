@@ -8,7 +8,7 @@
         <th>Email address</th>
         <th>Phone number</th>
         <th>Company</th>
-        <th><NewUserForm @submitted="getWorkers()" /></th>
+        <th><NewUserForm @submitted="getWorkers()" :workerId="workers.length"/></th>
       </tr>
       <tr v-for="worker in workers" :key="worker.usersid">
         <td>{{ worker.name }}</td>

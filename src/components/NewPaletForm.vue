@@ -30,19 +30,6 @@
           </b-form-select>
         </b-form-group>
 
-        <!-- <b-form-group
-          id="input-group-3"
-          label="Date of planting:"
-          label-for="input-3"
-        >
-          <b-form-datepicker
-            id="input-3"
-            v-model="form.dateofplanting"
-            locale="pl-PL"
-            required
-          ></b-form-datepicker>
-        </b-form-group> -->
-
         <b-button type="submit" variant="primary">Submit</b-button>
         <b-button type="reset" variant="danger">Reset</b-button>
       </b-form>
@@ -62,10 +49,8 @@ export default {
     return {
       plants: [],
       form: {
-        paletid: "",
         paletnumber: "",
         paletplantstypeid: "",
-        dateofplanting: "",
       },
       show: true,
     };

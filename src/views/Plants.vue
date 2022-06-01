@@ -5,7 +5,7 @@
       <tr id="headers">
         <th>Id</th>
         <th>Name</th>
-        <th><NewPlantTypeForm v-if="userId == 0" /></th>
+        <th><NewPlantTypeForm v-if="userId == 0" :plantId="plants.length"/></th>
       </tr>
       <tr v-for="plant in plants" :key="plant.paletplantstypeid">
         <td>{{ plant.paletplantstypeid }}</td>
@@ -32,6 +32,7 @@ export default {
   data() {
     return {
       plants: [],
+      plantsId: 0,
     };
   },
   computed: {

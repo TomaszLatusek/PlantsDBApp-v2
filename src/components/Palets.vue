@@ -5,7 +5,7 @@
       <th>Palet number</th>
       <th>Plant type</th>
       <th>Date of planting</th>
-      <th><NewPaletForm /></th>
+      <th><NewPaletForm :paletId="palets.length"/></th>
     </tr>
     <tr v-if="palets.length == 0">
       <td colspan="6" id="no-records">No records to show</td>

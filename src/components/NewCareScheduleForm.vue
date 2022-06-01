@@ -3,13 +3,6 @@
     <b-button v-b-modal.modal-1 title="Add new care schedule">+</b-button>
     <b-modal id="modal-1" title="Add new care schedule">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-        <b-form-group id="input-group-0" label="Id:" label-for="input-0">
-          <b-form-input
-            id="input-0"
-            v-model="form.carescheduleid"
-            required
-          ></b-form-input>
-        </b-form-group>
 
         <b-form-group
           id="input-group-1"
@@ -94,9 +87,13 @@ export default {
       show: true,
     };
   },
+  props: {
+    scheduleId: Number,
+  },
   methods: {
     onSubmit(event) {
       event.preventDefault();
+      this.form.carescheduleid = this.scheduleId + 1;
       console.log(this.form)
       axios.post(`${API}/CareSchedule`, this.form);
       this.$router.go();
