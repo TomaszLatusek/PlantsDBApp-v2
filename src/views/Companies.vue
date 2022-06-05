@@ -73,6 +73,8 @@ export default {
 
 .companiesWrapper {
   margin-left: 250px;
+  height: 100vh;
+  background: #eceff1;
 }
 
 .titleRow td {

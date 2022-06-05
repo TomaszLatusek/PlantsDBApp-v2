@@ -4,7 +4,7 @@
     <table id="finishedTasks">
       <tr id="headers">
         <th>Palet number</th>
-        <th v-if="userId == 0">Worker</th>
+        <th v-if="userCategoryId == 0">Worker</th>
         <th>Plant</th>
         <th>Activity</th>
         <th>Realisation date</th>
@@ -15,7 +15,7 @@
       <tr v-for="task in finishedTasks" :key="task.actualtaskid">
         <td>{{ task.paletid }}</td>
         <td
-          v-if="userId == 0"
+          v-if="userCategoryId == 0"
           v-b-modal.modal-1
           @click="getWorker(task.userid)"
         >
@@ -26,7 +26,7 @@
         <td>
           {{
             new Date(task.realizationdate).toLocaleDateString(
-              "en-US",
+              "pl-PL",
               dateFormat
             )
           }}
@@ -64,7 +64,7 @@ export default {
           (result) =>
             (result.userid == localStorage.userId &&
               result.realizationdate != null) ||
-            (localStorage.userId == 0 && result.realizationdate != null)
+            (localStorage.userCategoryId == 0 && result.realizationdate != null)
         )
         .sort((a, b) => {
           if (a.realizationDate > b.realizationDate) return -1;
@@ -74,6 +74,9 @@ export default {
     },
     userId: function () {
       return localStorage.userId;
+    },
+    userCategoryId: function () {
+      return localStorage.userCategoryId;
     },
   },
   methods: {

@@ -5,7 +5,7 @@
       <tr id="headers">
         <th>Id</th>
         <th>Name</th>
-        <th><NewPlantTypeForm v-if="userId == 0" :plantId="plants.length"/></th>
+        <th><NewPlantTypeForm v-if="userCategoryId == 0" :plantId="plants.length"/></th>
       </tr>
       <tr v-for="plant in plants" :key="plant.paletplantstypeid">
         <td>{{ plant.paletplantstypeid }}</td>
@@ -39,6 +39,9 @@ export default {
     userId: function () {
       return localStorage.userId;
     },
+    userCategoryId: function () {
+      return localStorage.userCategoryId;
+    },
   },
   methods: {
     getPlants() {
@@ -54,11 +57,6 @@ export default {
 };
 </script>
 
-<style scoped>
-.plantsWrapper {
-  margin-left: 250px;
-}
-</style>
 
 <style scoped>
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
@@ -67,8 +65,10 @@ export default {
   font-family: "Roboto", sans-serif;
 }
 
-.companiesWrapper {
+.plantsWrapper {
   margin-left: 250px;
+  height: 100vh;
+  background: #eceff1;
 }
 
 .titleRow td {

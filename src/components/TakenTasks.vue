@@ -4,7 +4,7 @@
     <table id="takenTasks">
       <tr id="headers">
         <th>Palet number</th>
-        <th v-if="userId == 0">Worker</th>
+        <th v-if="userCategoryId == 0">Worker</th>
         <th>Plant</th>
         <th>Activity</th>
         <th>Due</th>
@@ -16,7 +16,7 @@
       </tr>
       <tr v-for="task in takenTasks" :key="task.actualtaskid">
         <td>{{ task.paletid }}</td>
-        <td v-if="userId == 0" v-b-modal.modal-1 @click="getWorker(task.userid)">
+        <td v-if="userCategoryId == 0" v-b-modal.modal-1 @click="getWorker(task.userid)">
           {{ task.workerName + " " + task.workerLastName }}
         </td>
         <td>{{ task.paletplantstypename || "not specified" }}</td>
@@ -67,7 +67,7 @@ export default {
         .filter(
           (result) =>
             (result.userid == this.userId ||
-              (this.userId == 0 && result.userid > 0)) &&
+              (this.userCategoryId == 0 && result.userid > 0)) &&
             result.realizationdate == null
         )
         .sort((a, b) => {
@@ -80,6 +80,9 @@ export default {
     },
     userId: function () {
       return localStorage.userId;
+    },
+    userCategoryId: function () {
+      return localStorage.userCategoryId;
     },
   },
   methods: {

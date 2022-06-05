@@ -60,6 +60,7 @@ export default {
   },
   props: {
     id: Number,
+    role: Number,
   },
   methods: {
     getTasks() {
@@ -72,6 +73,9 @@ export default {
   computed: {
     userId: function () {
       return localStorage.userId;
+    },
+    userCategoryId: function () {
+      return localStorage.userCategoryId;
     },
   },
   mounted() {

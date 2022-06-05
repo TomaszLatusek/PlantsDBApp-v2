@@ -4,9 +4,9 @@
       <router-link to="/tasks" id="tasks">Tasks</router-link>
       <router-link v-if="userId > 0" to="/account" id="account">My Account</router-link>
       <router-link to="/plants" id="plants">Plants</router-link>
-      <router-link v-if="userId == 0" to="/workers" id="workers">Workers</router-link>
-      <router-link v-if="userId == 0" to="/companies" id="companies">Companies</router-link>
-      <router-link v-if="userId == 0" to="/utils" id="utils">Utils</router-link>
+      <router-link v-if="userCategoryId == 0" to="/workers" id="workers">Workers</router-link>
+      <router-link v-if="userCategoryId == 0" to="/companies" id="companies">Companies</router-link>
+      <router-link v-if="userCategoryId == 0" to="/utils" id="utils">Utils</router-link>
       <router-link to="/" id="home">Log out</router-link>
     </div>
   </div>
@@ -19,6 +19,9 @@ export default {
   computed: {
     userId: function () {
       return localStorage.userId;
+    },
+    userCategoryId: function () {
+      return localStorage.userCategoryId;
     },
   },
 };

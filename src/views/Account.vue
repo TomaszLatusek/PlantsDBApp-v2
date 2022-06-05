@@ -67,14 +67,17 @@ export default {
 
 .accountWrapper {
   margin-left: 250px;
+  height: 100vh;
+  background: #eceff1;
+  padding-top: 40px;
 }
 
 table {
   margin: 0 auto;
   text-align: left;
-  margin-top: 40px;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
   border-collapse: collapse;
+  background: white;
+  box-shadow: 2px 2px 4px rgb(60 60 59 / 15%);
 }
 
 tr:hover {

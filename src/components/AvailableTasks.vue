@@ -6,7 +6,7 @@
       <th>Activity</th>
       <th>Due</th>
       <th>Priority</th>
-      <th v-if="userId > 0">Action</th>
+      <th v-if="userCategoryId > 0">Action</th>
     </tr>
     <tr v-if="availableTasks.length == 0">
       <td colspan="6" id="no-records">No records to show</td>
@@ -20,7 +20,7 @@
         {{ getDueDate(task).toLocaleDateString("pl-PL", dateFormat) }}
       </td>
       <td>{{ task.prioritynumber }}</td>
-      <td v-if="userId > 0">
+      <td v-if="userCategoryId > 0">
         <b-dropdown id="dropdown-dropright" dropright class="m-2" size="sm">
           <b-dropdown-item class="dropdown-item"
             ><a @click="takeTask(task)" class="dropdown-item"
@@ -59,6 +59,9 @@ export default {
     },
     userId: function () {
       return localStorage.userId;
+    },
+    userCategoryId: function () {
+      return localStorage.userCategoryId;
     },
   },
   methods: {
@@ -159,4 +162,5 @@ input[type="checkbox"]:not(:disabled):hover:before {
   font-weight: bold;
   color: red;
 }
+
 </style>

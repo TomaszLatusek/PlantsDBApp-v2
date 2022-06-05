@@ -51,10 +51,11 @@ export default {
 
             this.$router.push({
               name: "tasks",
-              params: { id: response.data.usersid },
+              params: { id: response.data.usersid, role: response.data.usercategoryid },
             });
 
             localStorage.userId = response.data.usersid;
+            localStorage.userCategoryId = response.data.usercategoryid;
           } else {
             this.invalidUsername = true;
           }
